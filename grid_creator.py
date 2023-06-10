@@ -9,9 +9,9 @@ FONT = "Roboto-Medium.ttf"
 TEXT_COLOR = (0, 0, 0)
 
 
-def generate_grid(
-    cells_x,
-    cells_y,
+def create_grid(
+    rows,
+    cols,
     cell_size=CELL_SIZE,
     font_size=FONT_SIZE,
     font=FONT,
@@ -20,14 +20,14 @@ def generate_grid(
     background_color=BACKGROUND_COLOR,
     text_color=TEXT_COLOR,
 ):
-    image = Image.new("RGBA", (cells_x * cell_size, cells_y * cell_size))
+    image = Image.new("RGBA", (cols * cell_size, rows * cell_size))
     drawer = ImageDraw.Draw(image)
     font = ImageFont.truetype(font, font_size)
 
     image.paste(background_color, (0, 0, image.width, image.height))
 
-    for x in range(cells_x):
-        for y in range(cells_y):
+    for x in range(cols):
+        for y in range(rows):
             drawer.text(
                 (x * cell_size + cell_size / 2, y * cell_size + cell_size / 2),
                 f"{x},{y}",
@@ -36,21 +36,25 @@ def generate_grid(
                 anchor="mm",
             )
 
-    for x in range(cells_x + 1):
+    for x in range(cols + 1):
         drawer.line(
-            (x * cell_size, 0, x * cell_size, cells_y * cell_size),
+            (x * cell_size, 0, x * cell_size, rows * cell_size),
             fill=line_color,
             width=line_width,
         )
 
-    for y in range(cells_y + 1):
+    for y in range(rows + 1):
         drawer.line(
-            (0, y * cell_size, cells_x * cell_size, y * cell_size),
+            (0, y * cell_size, cols * cell_size, y * cell_size),
             fill=line_color,
             width=line_width,
         )
     return image
 
 
-def save_grid(image, cells_x, cells_y):
-    image.save(f"{cells_x}x{cells_y}grid.png", "PNG")
+def save_grid_default_name(image, rows, cols):
+    image.save(f"{rows}x{cols}grid.png", "PNG")
+
+
+def save_grid(image, name):
+    image.save(name, "PNG")
